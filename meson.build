@@ -1,5 +1,5 @@
 project('Philox', 'cpp', 'c', default_options : [
-    'warning_level=0',
+    'warning_level=3',
     'werror=false',
     'cpp_std=c++20',
     'b_lto=true',
@@ -9,12 +9,6 @@ project('Philox', 'cpp', 'c', default_options : [
 inc = include_directories('include')
 
 philox_dep = declare_dependency(include_directories : inc)
-
-add_project_arguments(
-    '-Wno-writable-strings',  # TestU01 incorrectly uses char* instead of const char*
-
-    language : 'cpp'
-)
 
 subdir('TestU01')
 
