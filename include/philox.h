@@ -4,6 +4,7 @@
 
 #include <array>
 #include <cstdint>
+#include <limits>
 #include <utility>
 
 class Philox {
@@ -26,6 +27,7 @@ class Philox {
         if (buffer_pos_ < 4) {
             out = buffer_[buffer_pos_];
             buffer_pos_++;
+
             return out;
         }
 
@@ -50,6 +52,16 @@ class Philox {
         buffer_pos_ = 1;
 
         return buffer_[0];
+    }
+
+    // taken from Numpy
+    // throw away 11 bits (need only 53) and divide by 2**53 (max representable integer)
+    // only one I found that actually converts to [0.0, 1.0)
+    // does not generate subnormals
+    constexpr double NextF64() {
+        double x = static_cast<double>(Next() >> 11) / 9007199254740992.0;
+
+        return x;
     }
 
    private:
