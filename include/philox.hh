@@ -4,7 +4,6 @@
 
 #include <array>
 #include <cstdint>
-#include <limits>
 #include <utility>
 
 class Philox {
@@ -15,7 +14,7 @@ class Philox {
     using Key = std::array<uint64_t, 2>;
 
     constexpr Philox() : Philox({0, 0}) {}
-    constexpr Philox(Key key) : key_{key} {}
+    constexpr explicit Philox(Key key) : key_{key} {}
 
     constexpr Ctr ctr() const { return ctr_; }
     constexpr void ctr(Ctr ctr) { ctr_ = ctr; }
