@@ -14,6 +14,9 @@ class Philox {
     using Ctr = std::array<uint64_t, 4>;
     using Key = std::array<uint64_t, 2>;
 
+    constexpr Philox() : Philox({0, 0}) {}
+    constexpr Philox(Key key) : key_{key} {}
+
     constexpr Ctr ctr() const { return ctr_; }
     constexpr void ctr(Ctr ctr) { ctr_ = ctr; }
 
@@ -21,11 +24,10 @@ class Philox {
     constexpr void key(Key key) { key_ = key; }
 
     constexpr uint64_t Next() {
-        uint64_t out = 0;
         Ctr ct{};
 
         if (buffer_pos_ < 4) {
-            out = buffer_[buffer_pos_];
+            uint64_t out = buffer_[buffer_pos_];
             buffer_pos_++;
 
             return out;

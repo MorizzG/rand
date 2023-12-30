@@ -1,4 +1,4 @@
-project('Philox', 'cpp', 'c', default_options : [
+project('Rand', 'cpp', 'c', default_options : [
     'warning_level=3',
     'werror=false',
     'cpp_std=c++20',
@@ -8,10 +8,9 @@ project('Philox', 'cpp', 'c', default_options : [
 
 inc = include_directories('include')
 
-philox_dep = declare_dependency(include_directories : inc)
+rand_dep = declare_dependency(include_directories : inc)
 
 subdir('TestU01')
 
-smallcrush_exe = executable('smallcrush', 'test/smallcrush.cc', dependencies : [philox_dep, testu01_dep])
-
-crush_exe = executable('crush', 'test/crush.cc', dependencies : [philox_dep, testu01_dep])
+executable('philox_smallcrush', 'test/philox/smallcrush.cc', dependencies : [rand_dep, testu01_dep])
+executable('philox_crush', 'test/philox/crush.cc', dependencies : [rand_dep, testu01_dep])

@@ -1,4 +1,3 @@
-#include <cassert>
 #include <cstdint>
 
 extern "C" {
@@ -6,7 +5,7 @@ extern "C" {
 #include "unif01.h"
 }
 
-#include "philox.h"
+#include "philox.hh"
 
 /*
 typedef struct {
@@ -28,11 +27,9 @@ double GetU01(void* /* param */, void* state) {
 unsigned long GetBits(void* /* param */, void* state) {
     auto* philox = static_cast<Philox*>(state);
 
-    unsigned long u = static_cast<uint32_t>(philox->Next());
+    uint64_t u = philox->Next();
 
-    assert(0 <= u && u < (1ULL << 32));
-
-    return u;
+    return static_cast<unsigned long>(u);
 }
 
 void Write(void* /*state*/) {}
@@ -49,7 +46,7 @@ int main() {
     gen.GetBits = &GetBits;
     gen.Write = &Write;
 
-    bbattery_Crush(&gen);
+    bbattery_SmallCrush(&gen);
 
     return 0;
 }
