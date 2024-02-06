@@ -76,7 +76,7 @@ bool test_2x32() {
             assert(counter[1] == philox_2x32.counter()[1]);
 
             if (y[0] != x0 || y[1] != x1) {
-                std::cout << "compare_32 test failed for i=" << i << std::endl;
+                std::cout << "Philox2x32 test failed for i=" << i << std::endl;
                 std::cout << "Key: key=[" << key[0] << "]" << std::endl;
                 std::cout << "Counter: [" << counter[1] << " " << counter[0] << "]" << std::endl;
 

@@ -16,7 +16,7 @@ class Philox2x32 : public RandomGen {
     using Key = std::array<uint32_t, 1>;
 
     constexpr Philox2x32() : Philox2x32({0}) {}
-    constexpr explicit Philox2x32(Key key) : key_{key} { PhiloxRounds(kNumRounds); }
+    constexpr explicit Philox2x32(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
     constexpr Counter counter() const { return counter_; }
@@ -39,7 +39,7 @@ class Philox2x32 : public RandomGen {
         }
 
         // advance buffer by kNumRounds rounds
-        PhiloxRounds(kNumRounds);
+        buffer_ = PhiloxRounds(key_, counter_);
 
         // return first element of buffer
         buffer_pos_ = 1;
@@ -55,44 +55,34 @@ class Philox2x32 : public RandomGen {
     }
 
    private:
-    static /* constexpr */ std::pair<uint32_t, uint32_t> MulHiLo32(uint32_t x, uint32_t y) {
+    static constexpr std::pair<uint32_t, uint32_t> MulHiLo32(uint32_t x, uint32_t y) {
         uint64_t z = static_cast<uint64_t>(x) * static_cast<uint64_t>(y);
 
         return std::make_pair(static_cast<uint32_t>(z >> 32), static_cast<uint32_t>(z));
     }
 
-    static /* constexpr */ Key BumpKey(Key key) {
+    static constexpr Key BumpKey(Key key) {
         key[0] += 0x9E3779B9UL;
 
         return key;
     }
 
-    static /* constexpr */ Counter PhiloxRound(Key key, Counter counter) {
+    static constexpr Counter PhiloxRound(Key key, Counter counter) {
         auto [hi, lo] = MulHiLo32(0xD256D193, counter[0]);
 
-        Counter out{hi ^ key[0] ^ counter[1], lo};
-
-        return out;
+        return {hi ^ key[0] ^ counter[1], lo};
     }
 
-    constexpr void PhiloxRounds(uint32_t R) {
-        if (R == 0) {
-            return;
-        }
-
-        // init counter and key
-        Counter counter = counter_;
-        Key key = key_;
-
+    static constexpr Counter PhiloxRounds(Key key, Counter counter) {
         counter = PhiloxRound(key, counter);
 
-        for (uint32_t r = 1; r < R; r++) {
+        for (uint32_t r = 1; r < kNumRounds; r++) {
             key = BumpKey(key);
             counter = PhiloxRound(key, counter);
         }
 
         // save updated counter into buffer
-        buffer_ = counter;
+        return counter;
     }
 
     Counter counter_{0, 0};
@@ -110,7 +100,7 @@ class Philox4x32 : public RandomGen {
     using Key = std::array<uint32_t, 2>;
 
     constexpr Philox4x32() : Philox4x32({0, 0}) {}
-    constexpr explicit Philox4x32(Key key) : key_{key} { PhiloxRounds(kNumRounds); }
+    constexpr explicit Philox4x32(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
     constexpr Counter counter() const { return counter_; }
@@ -141,7 +131,7 @@ class Philox4x32 : public RandomGen {
         }
 
         // advance buffer by kNumRounds rounds
-        PhiloxRounds(kNumRounds);
+        buffer_ = PhiloxRounds(key_, counter_);
 
         // return first element of buffer
         buffer_pos_ = 1;
@@ -177,24 +167,16 @@ class Philox4x32 : public RandomGen {
         return {hi1 ^ key[0] ^ counter[1], lo1, hi0 ^ key[1] ^ counter[3], lo0};
     }
 
-    constexpr void PhiloxRounds(uint32_t R) {
-        if (R == 0) {
-            return;
-        }
+    static constexpr Counter PhiloxRounds(Key key, Counter counter) {
+        counter = PhiloxRound(key, counter);
 
-        // init counter and key
-        Counter counter = counter_;
-        Key key = key_;
-
-        PhiloxRound(key, counter);
-
-        for (uint32_t r = 1; r < R; r++) {
+        for (uint32_t r = 1; r < kNumRounds; r++) {
             key = BumpKey(key);
             counter = PhiloxRound(key, counter);
         }
 
         // save updated counter into buffer
-        buffer_ = counter;
+        return counter;
     }
 
     Counter counter_{0, 0, 0, 0};
@@ -212,7 +194,7 @@ class Philox2x64 : public RandomGen {
     using Key = std::array<uint64_t, 1>;
 
     constexpr Philox2x64() : Philox2x64({0}) {}
-    constexpr explicit Philox2x64(Key key) : key_{key} { PhiloxRounds(kNumRounds); }
+    constexpr explicit Philox2x64(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
     constexpr Counter counter() const { return counter_; }
@@ -235,7 +217,7 @@ class Philox2x64 : public RandomGen {
         }
 
         // advance buffer by kNumRounds rounds
-        PhiloxRounds(kNumRounds);
+        buffer_ = PhiloxRounds(key_, counter_);
 
         // return first element of buffer
         buffer_pos_ = 1;
@@ -262,24 +244,16 @@ class Philox2x64 : public RandomGen {
         return {hi ^ key[0] ^ counter[1], lo};
     }
 
-    constexpr void PhiloxRounds(uint32_t R) {
-        if (R == 0) {
-            return;
-        }
+    static constexpr Counter PhiloxRounds(Key key, Counter counter) {
+        counter = PhiloxRound(key, counter);
 
-        // init counter and key
-        Counter counter = counter_;
-        Key key = key_;
-
-        PhiloxRound(key, counter);
-
-        for (uint32_t r = 1; r < R; r++) {
+        for (uint32_t r = 1; r < kNumRounds; r++) {
             key = BumpKey(key);
             counter = PhiloxRound(key, counter);
         }
 
         // save updated counter into buffer
-        buffer_ = counter;
+        return counter;
     }
 
     Counter counter_{0, 0};
@@ -297,7 +271,7 @@ class Philox4x64 : public RandomGen {
     using Key = std::array<uint64_t, 2>;
 
     constexpr Philox4x64() : Philox4x64({0, 0}) {}
-    constexpr explicit Philox4x64(Key key) : key_{key} { PhiloxRounds(kNumRounds); }
+    constexpr explicit Philox4x64(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
     constexpr Counter counter() const { return counter_; }
@@ -328,7 +302,7 @@ class Philox4x64 : public RandomGen {
         }
 
         // advance buffer by kNumRounds rounds
-        PhiloxRounds(kNumRounds);
+        buffer_ = PhiloxRounds(key_, counter_);
 
         // return first element of buffer
         buffer_pos_ = 1;
@@ -357,24 +331,16 @@ class Philox4x64 : public RandomGen {
         return {hi1 ^ key[0] ^ counter[1], lo1, hi0 ^ key[1] ^ counter[3], lo0};
     }
 
-    constexpr void PhiloxRounds(uint32_t R) {
-        if (R == 0) {
-            return;
-        }
+    static constexpr Counter PhiloxRounds(Key key, Counter counter) {
+        counter = PhiloxRound(key, counter);
 
-        // init counter and key
-        Counter counter = counter_;
-        Key key = key_;
-
-        PhiloxRound(key, counter);
-
-        for (uint32_t r = 1; r < R; r++) {
+        for (uint32_t r = 1; r < kNumRounds; r++) {
             key = BumpKey(key);
             counter = PhiloxRound(key, counter);
         }
 
         // save updated counter into buffer
-        buffer_ = counter;
+        return counter;
     }
 
     Counter counter_{0, 0, 0, 0};

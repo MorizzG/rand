@@ -8,7 +8,7 @@
 typedef struct {
     void* state;
     void* param;
-    char* name;
+    const char* name;
     double (*GetU01)(void* param, void* state);
     unsigned long (*GetBits)(void* param, void* state);
     void (*Write)(void* state);

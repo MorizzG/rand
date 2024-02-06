@@ -35,7 +35,7 @@ int main(int argc, char* argv[]) {
     }
 
     RandomGen* gen;
-    char* name;
+    const char* name;
 
     if (args.size() != 2) {
         std::cout << "Usage: <exe> <randomgen>" << std::endl;
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
 
     unif01_gen.state = gen;
     unif01_gen.param = nullptr;
-    unif01_gen.name = static_cast<char*>(name);
+    unif01_gen.name = name;
     unif01_gen.GetU01 = &GetU01;
     unif01_gen.GetBits = &GetBits;
     unif01_gen.Write = &Write;
