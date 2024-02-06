@@ -9,7 +9,7 @@
 
 #define HAVE_ERF 1
 
-#define HAVE_RANDOM 1
+// #define HAVE_RANDOM 1
 
 #define HAVE_LGAMMA 1
 

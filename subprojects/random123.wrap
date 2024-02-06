@@ -1,0 +1,6 @@
+[wrap-git]
+url = https://github.com/DEShawResearch/random123
+revision = v1.14.0
+depth = 1
+
+patch_directory = random123

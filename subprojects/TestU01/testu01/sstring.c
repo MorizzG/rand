@@ -1504,7 +1504,6 @@ static void HammingCorr_L(unif01_Gen* gen, sstring_Res* res, long n, int r, int 
                 ++X;
             }
         }
-        printf("X: %d\n", X);
         ++res->Counters[Pre][X];
         Pre = X;
     }
