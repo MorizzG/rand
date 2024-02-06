@@ -94,8 +94,6 @@ bool test_philox2x32() {
 
     // key = [0]
     if (!run_test()) {
-        std::cout << "Test failed for key [" << key[0] << "]" << std::endl;
-
         return false;
     }
 
@@ -108,8 +106,6 @@ bool test_philox2x32() {
         philox_2x32 = Philox2x32{{key0}};
 
         if (!run_test()) {
-            std::cout << "Test failed for key [" << key[0] << "]" << std::endl;
-
             return false;
         }
     }
@@ -165,8 +161,6 @@ bool test_philox4x32() {
 
     // key = [0]
     if (!run_test()) {
-        std::cout << "Test failed for key [" << key[1] << key[0] << "]" << std::endl;
-
         return false;
     }
 
@@ -181,8 +175,6 @@ bool test_philox4x32() {
         philox_4x32 = Philox4x32{{key0, key1}};
 
         if (!run_test()) {
-            std::cout << "Test failed for key [" << key[1] << key[0] << "]" << std::endl;
-
             return false;
         }
     }
@@ -212,7 +204,7 @@ bool test_philox2x64() {
             assert(counter[1] == philox_2x64.counter()[1]);
 
             if (y[0] != x0 || y[1] != x1) {
-                std::cout << "Philox2x32 test failed for i=" << i << std::endl;
+                std::cout << "Philox2x64 test failed for i=" << i << std::endl;
                 std::cout << "Key: key=[" << key[0] << "]" << std::endl;
                 std::cout << "Counter: [" << counter[1] << " " << counter[0] << "]" << std::endl;
 
@@ -230,8 +222,6 @@ bool test_philox2x64() {
 
     // key = [0]
     if (!run_test()) {
-        std::cout << "Test failed for key [" << key[0] << "]" << std::endl;
-
         return false;
     }
 
@@ -244,8 +234,6 @@ bool test_philox2x64() {
         philox_2x64 = Philox2x64{{key0}};
 
         if (!run_test()) {
-            std::cout << "Test failed for key [" << key[0] << "]" << std::endl;
-
             return false;
         }
     }
@@ -279,7 +267,7 @@ bool test_philox4x64() {
             assert(counter[3] == philox_4x64.counter()[3]);
 
             if (y[0] != x0 || y[1] != x1 || y[2] != x2 || y[3] != x3) {
-                std::cout << "Philox2x64 test failed for i=" << i << std::endl;
+                std::cout << "Philox4x64 test failed for i=" << i << std::endl;
                 std::cout << "Key: key=[" << key[1] << key[0] << "]" << std::endl;
                 std::cout << "Counter: [" << counter[3] << " " << counter[2] << counter[1] << " "
                           << counter[0] << "]" << std::endl;
@@ -299,8 +287,6 @@ bool test_philox4x64() {
 
     // key = [0]
     if (!run_test()) {
-        std::cout << "Test failed for key [" << key[0] << "]" << std::endl;
-
         return false;
     }
 
@@ -315,8 +301,6 @@ bool test_philox4x64() {
         philox_4x64 = Philox4x64{{key0, key1}};
 
         if (!run_test()) {
-            std::cout << "Test failed for key [" << key[1] << key[0] << "]" << std::endl;
-
             return false;
         }
     }
@@ -325,11 +309,23 @@ bool test_philox4x64() {
 }
 
 int main() {
-    bool all_passed = true;
+    int num_failed = 0;
 
     if (!test_philox2x32()) {
-        all_passed = false;
+        num_failed++;
     }
 
-    return all_passed ? 0 : 1;
+    if (!test_philox4x32()) {
+        num_failed++;
+    }
+
+    if (!test_philox2x64()) {
+        num_failed++;
+    }
+
+    if (!test_philox4x64()) {
+        num_failed++;
+    }
+
+    return num_failed;
 }

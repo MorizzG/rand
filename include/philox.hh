@@ -4,6 +4,7 @@
 
 #include <array>
 #include <cstdint>
+#include <iostream>
 #include <utility>
 
 #include "randomgen.hh"
@@ -81,7 +82,6 @@ class Philox2x32 : public RandomGen {
             counter = PhiloxRound(key, counter);
         }
 
-        // save updated counter into buffer
         return counter;
     }
 
@@ -175,7 +175,6 @@ class Philox4x32 : public RandomGen {
             counter = PhiloxRound(key, counter);
         }
 
-        // save updated counter into buffer
         return counter;
     }
 
@@ -226,7 +225,7 @@ class Philox2x64 : public RandomGen {
     }
 
    private:
-    static constexpr std::pair<uint64_t, uint64_t> MulHiLo64(uint64_t x, uint64_t y) {
+    static /* constexpr */ std::pair<uint64_t, uint64_t> MulHiLo64(uint64_t x, uint64_t y) {
         __uint128_t z = static_cast<__uint128_t>(x) * static_cast<__uint128_t>(y);
 
         return std::make_pair(static_cast<uint64_t>(z >> 64), static_cast<uint64_t>(z));
@@ -239,9 +238,11 @@ class Philox2x64 : public RandomGen {
     }
 
     static constexpr Counter PhiloxRound(Key key, Counter counter) {
-        auto [hi, lo] = MulHiLo64(0xD2E7470EE14C6C93ULL, counter[0]);
+        auto [hi, lo] = MulHiLo64(0xD2B74407B1CE6E93, counter[0]);
 
-        return {hi ^ key[0] ^ counter[1], lo};
+        Counter out{hi ^ key[0] ^ counter[1], lo};
+
+        return out;
     }
 
     static constexpr Counter PhiloxRounds(Key key, Counter counter) {
@@ -252,7 +253,6 @@ class Philox2x64 : public RandomGen {
             counter = PhiloxRound(key, counter);
         }
 
-        // save updated counter into buffer
         return counter;
     }
 
@@ -339,7 +339,6 @@ class Philox4x64 : public RandomGen {
             counter = PhiloxRound(key, counter);
         }
 
-        // save updated counter into buffer
         return counter;
     }
 

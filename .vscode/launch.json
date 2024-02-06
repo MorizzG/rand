@@ -11,6 +11,14 @@
             "program": "${workspaceFolder}/debug/crush",
             "args": [],
             "cwd": "${workspaceFolder}"
+        },
+        {
+            "type": "lldb",
+            "request": "launch",
+            "name": "Test Philox",
+            "program": "${workspaceFolder}/debug/test_philox",
+            "args": [],
+            "cwd": "${workspaceFolder}"
         }
     ]
 }
