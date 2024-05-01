@@ -32,8 +32,9 @@ class RandomGen {
     }
 
     // taken from Numpy
-    // throw away 11 bits (need only 53) and divide by 2**53 (max representable integer)
-    // only one I found that actually converts to [0.0, 1.0)
+    // throw away 11 bits (need only 53 for 53 bits of significant in IEEE754 F64) and divide by
+    // 2**53 (max representable integer)
+    // only one I found that actually generates in [0.0, 1.0)
     // does not generate subnormals
     double GenF64() {
         double x = static_cast<double>(Gen() >> 11) / 9007199254740992.0;
