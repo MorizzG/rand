@@ -16,12 +16,15 @@ class Philox2x32 : public RandomGen {
     using Key = std::array<uint32_t, 1>;
 
     constexpr Philox2x32() : Philox2x32({0}) {}
+
     constexpr explicit Philox2x32(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
+
     constexpr Counter counter() const { return counter_; }
 
     constexpr Key& key() { return key_; }
+
     constexpr Key key() const { return key_; }
 
     constexpr uint32_t GenU32() {
@@ -99,12 +102,15 @@ class Philox4x32 : public RandomGen {
     using Key = std::array<uint32_t, 2>;
 
     constexpr Philox4x32() : Philox4x32({0, 0}) {}
+
     constexpr explicit Philox4x32(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
+
     constexpr Counter counter() const { return counter_; }
 
     constexpr Key& key() { return key_; }
+
     constexpr Key key() const { return key_; }
 
     constexpr uint32_t GenU32() {
@@ -192,12 +198,15 @@ class Philox2x64 : public RandomGen {
     using Key = std::array<uint64_t, 1>;
 
     constexpr Philox2x64() : Philox2x64({0}) {}
+
     constexpr explicit Philox2x64(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
+
     constexpr Counter counter() const { return counter_; }
 
     constexpr Key& key() { return key_; }
+
     constexpr Key key() const { return key_; }
 
     constexpr uint64_t Gen() override {
@@ -270,12 +279,15 @@ class Philox4x64 : public RandomGen {
     using Key = std::array<uint64_t, 2>;
 
     constexpr Philox4x64() : Philox4x64({0, 0}) {}
+
     constexpr explicit Philox4x64(Key key) : key_{key} { buffer_ = PhiloxRounds(key_, counter_); }
 
     constexpr Counter& counter() { return counter_; }
+
     constexpr Counter counter() const { return counter_; }
 
     constexpr Key& key() { return key_; }
+
     constexpr Key key() const { return key_; }
 
     constexpr uint64_t Gen() override {
