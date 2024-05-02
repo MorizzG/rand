@@ -233,7 +233,7 @@ class Philox2x64 : public RandomGen {
     }
 
    private:
-    static /* constexpr */ std::pair<uint64_t, uint64_t> MulHiLo64(uint64_t x, uint64_t y) {
+    static constexpr std::pair<uint64_t, uint64_t> MulHiLo64(uint64_t x, uint64_t y) {
         __uint128_t z = static_cast<__uint128_t>(x) * static_cast<__uint128_t>(y);
 
         return std::make_pair(static_cast<uint64_t>(z >> 64), static_cast<uint64_t>(z));

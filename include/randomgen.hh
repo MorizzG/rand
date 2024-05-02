@@ -28,7 +28,7 @@ class RandomGen {
             }
         }
 
-        return m >> 64;
+        return static_cast<uint64_t>(m >> 64);
     }
 
     // taken from Numpy
